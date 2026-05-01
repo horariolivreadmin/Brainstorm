@@ -98,12 +98,12 @@ A primeira coisa que seu projeto precisa para existir formalmente é que o arqui
 ### 3. Rodando a Esteira
 1. Rode o orquestrador pela primeira vez apenas para que ele crie toda a arvore do `Data/`.
    ```bash
-   python Main.py
+   python main.py
    ```
 2. Após ele inicializar as pastas, arraste suas atas de reunião, transcrições de Discord, chamados de ticket ou logs técnicos brutais para dentro da pasta `Data/1_input/`.
 3. Inicie o destilador no terminal da raiz:
    ```bash
-   python Main.py
+   python main.py
    ```
 4. Sente-se, tome um café, e acompanhe o log de console em tempo real. Você verá explicitamente as inteligências extraindo o texto, se digladiando pelas revisões de qualidade e comitando na master de segurança.
 5. Quando o script finalizar `(✅ Fluxo arquitetural concluído...)`, corra na pasta `Data/4_output/` e abra o seu resplandescente arquivo `Documentacao_Oficial.md`.
