@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+// Representa um fato individual extraído ou pendente
+message Fato {
+    string texto = 1;
+}
+
+// Representa um subdomínio dentro de um domínio macro (Ex: 'seguranca' -> 'firewall')
+message Subdominio {
+    repeated string fatos = 1;
+}
+
+// Representa os tópicos ativos do sistema (H1 -> H2 -> Lista)
+message TopicosAtivos {
+    // Mapa onde a chave é o Domínio Macro (H1) e o valor é um mapa de Subdomínios (H2)
+    map<string, MapaSubdominios> dominios = 1;
+}
+
+// Auxiliar para contornar a limitação do Protobuf de mapas aninhados
+message MapaSubdominios {
+    map<string, Subdominio> subdominios = 1;
+}
+
+// Representa uma decisão revogada
+message DecisaoRevogada {
+    string decision = 1;
+    string reason = 2;
+    string revoked_in_chunk = 3;
+}
+
+// Metadados do estado
+message MetaData {
+    int32 version = 1;
+    string last_processed_chunk = 2;
+    string updated_at = 3;
+}
+
+// O Estado Central (SSOT) Completo
+message EstadoSistema {
+    MetaData _meta = 1;
+    TopicosAtivos active_topics = 2;
+    repeated DecisaoRevogada revoked_decisions = 3;
+}
+
+// --- Estruturas Auxiliares para o Pipeline Maker-Checker ---
+
+// O input bruto (Chunk)
+message ChunkContexto {
+    string arquivo_origem = 1;
+    string texto_bruto = 2;
+    int32 index_sequencia = 3;
+}
+
+// A extração delta do Agente 1 (Ainda não roteada)
+message ExtracaoFidelidade {
+    repeated string fatos_brutos = 1;
+}
+
+// A aprovação ou reprovação do Auditor (Agentes 3 ou 4)
+message RelatorioAuditoria {
+    bool aprovado = 1;
+    string motivo_reprovacao = 2;
+    repeated string dados_faltantes_ou_erros = 3;
+}
+
+// A proposta de inserção do Agente 2 (O JSON Patch)
+message PropostaRoteamento {
+    // Um pedaço da estrutura TopicosAtivos que será mesclada
+    TopicosAtivos patch_insercao = 1;
+    // Lista de decisões que o Agente 2 sugere revogar para inserir as novas
+    repeated DecisaoRevogada proposicoes_revogacao = 2;
+}
