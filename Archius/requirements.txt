@@ -1,2 +1,0 @@
-ollama>=0.2.1
-protobuf>=4.25.3
